@@ -3,11 +3,13 @@
 > 매일 체크하고, 연속 기록(🔥 스트릭)으로 습관을 지키는 웹 앱
 
 ![status](https://img.shields.io/badge/status-개발중-yellow)
-![milestone](https://img.shields.io/badge/milestone-M5-blue)
+![milestone](https://img.shields.io/badge/milestone-M6-blue)
 
 👉 **바로 써보기: https://wjamindot00.github.io/habit-tracker/**
 
-<!-- M3 이후 스크린샷 추가 -->
+| 라이트 | 다크 |
+|---|---|
+| <img src="docs/images/screenshot-light.jpg" width="280" alt="라이트 모드 화면"> | <img src="docs/images/screenshot-dark.jpg" width="280" alt="다크 모드 화면"> |
 
 ---
 
@@ -17,7 +19,9 @@
 |---|---|
 | ➕ 습관 추가 | "물 2L 마시기"처럼 매일 할 일을 등록 |
 | ☑️ 오늘 체크 | 했으면 체크 한 번 |
-| 🔥 스트릭 | 며칠 연속으로 지켰는지 표시 |
+| 🔥 스트릭 | 며칠 연속으로 지켰는지, 최장 기록은 며칠인지 표시 |
+| 📅 최근 7일 | 동그라미로 한눈에 보고, 깜빡한 날은 눌러서 소급 체크 |
+| 🌙 다크 모드 | 휴대폰·PC 설정에 맞춰 자동 전환 |
 | 💾 자동 저장 | 브라우저를 닫아도 기록 유지 |
 
 로그인 없음 · 서버 없음 · 설치 없음
@@ -48,7 +52,7 @@ npm test
 | ✅ | M2 | 핵심 로직: 스트릭 계산 + 저장 |
 | ✅ | M3 | 최소 UI 연결 → **MVP 완성 & 첫 배포** |
 | ✅ | M4 | 부가 기능: 7일 기록, 최장 스트릭 (달성률·백업은 보류) |
-| ⬜ | M5 | UI/UX 다듬기 |
+| ✅ | M5 | UI/UX 다듬기: 모바일 대응, 체크 피드백, 다크 모드 |
 | ⬜ | M6 | 마무리 |
 
 자세한 요구사항과 완료 기준 → **[docs/PRD.md](docs/PRD.md)**
@@ -57,7 +61,7 @@ npm test
 
 ```
 src/core/   핵심 로직 (화면과 무관, 테스트 대상)
-src/ui/     화면 그리기
+src/ui/     화면 그리기 + 스타일 (styles.css)
 tests/      core 테스트
 docs/       기획 문서
 ```

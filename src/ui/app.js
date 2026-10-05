@@ -27,12 +27,16 @@ const shortDate = (date) => `${Number(date.slice(5, 7))}/${Number(date.slice(8))
 export function mountApp(root) {
   let state = load();
   let editingId = null; // 이름 수정 중인 습관
+  let pop = null; // 방금 완료로 바꾼 버튼의 data-focus 키 — 다음 render에서 한 번 튀어 오른다
 
   const input = el('input', { name: 'name', placeholder: '예: 물 2L 마시기', autocomplete: 'off' });
   input.setAttribute('aria-label', '습관 이름');
-  const form = el('form', {}, [input, el('button', { type: 'submit', textContent: '추가' })]);
-  const message = el('p', { role: 'alert' });
-  const list = el('ul');
+  const form = el('form', { className: 'add-form' }, [
+    input,
+    el('button', { type: 'submit', className: 'btn btn-primary', textContent: '추가' }),
+  ]);
+  const message = el('p', { role: 'alert', className: 'message' });
+  const list = el('ul', { className: 'habit-list' });
 
   // [비활성화] 백업
   // const exportButton = el('button', { type: 'button', textContent: '내보내기' });
@@ -42,10 +46,13 @@ export function mountApp(root) {
 
   // 브라우저 기본 confirm()은 인앱 브라우저 등에서 막힐 수 있어 <dialog>로 직접 띄운다.
   const dialogText = el('p');
-  const dialogOk = el('button', { value: 'ok' });
+  const dialogOk = el('button', { value: 'ok', className: 'btn btn-danger' });
   const dialog = el('dialog', {}, [
     dialogText,
-    el('form', { method: 'dialog' }, [el('button', { value: 'cancel', textContent: '취소' }), ' ', dialogOk]),
+    el('form', { method: 'dialog', className: 'dialog-actions' }, [
+      el('button', { value: 'cancel', className: 'btn', textContent: '취소' }),
+      dialogOk,
+    ]),
   ]);
   let onDialogOk = null;
   // 취소 버튼·Esc는 returnValue가 'ok'가 아니므로 아무것도 하지 않는다.
@@ -86,6 +93,20 @@ export function mountApp(root) {
     return true;
   }
 
+  // 체크 토글. 완료로 바뀌는 경우에만 튀어 오르는 피드백을 준다.
+  function toggle(habit, day, focusKey) {
+    pop = habit.checks.includes(day) ? null : focusKey;
+    update((s) => toggleCheck(s, habit.id, day));
+    pop = null;
+  }
+
+  // 다시 그린 뒤에도 키보드 포커스가 같은 버튼에 남도록 data-focus 키를 붙인다.
+  function focusable(node, key) {
+    node.dataset.focus = key;
+    if (key === pop) node.classList.add('pop');
+    return node;
+  }
+
   function startEdit(id) {
     editingId = id;
     message.textContent = '';
@@ -95,8 +116,12 @@ export function mountApp(root) {
   function renderEditing(habit) {
     const nameInput = el('input', { value: habit.name, autocomplete: 'off' });
     nameInput.setAttribute('aria-label', '새 이름');
-    const cancelButton = el('button', { type: 'button', textContent: '취소' });
-    const editForm = el('form', {}, [nameInput, ' ', el('button', { type: 'submit', textContent: '저장' }), ' ', cancelButton]);
+    const cancelButton = el('button', { type: 'button', className: 'btn', textContent: '취소' });
+    const editForm = el('form', { className: 'edit-form' }, [
+      nameInput,
+      el('button', { type: 'submit', className: 'btn btn-primary', textContent: '저장' }),
+      cancelButton,
+    ]);
 
     const cancel = () => startEdit(null);
     cancelButton.addEventListener('click', cancel);
@@ -111,35 +136,46 @@ export function mountApp(root) {
     });
 
     queueMicrotask(() => nameInput.focus());
-    return el('li', {}, [editForm]);
+    return el('li', { className: 'habit' }, [editForm]);
   }
 
-  // 최근 7일 ●○. 누르면 그날 기록을 토글한다 (지난 날짜 소급 체크).
+  // 최근 7일 ●○ — 채운 동그라미가 완료한 날. 누르면 그날 기록을 토글한다 (지난 날짜 소급 체크).
   function renderWeek(habit, date) {
     const days = recentDays(date, CHECK_WINDOW_DAYS);
     const buttons = days.map((day) => {
       const done = habit.checks.includes(day);
-      const button = el('button', { type: 'button', textContent: done ? '●' : '○', title: day });
+      const button = el('button', {
+        type: 'button',
+        className: `day${done ? ' checked' : ''}${day === date ? ' today' : ''}`,
+        textContent: Number(day.slice(8)),
+        title: day,
+      });
       button.setAttribute('aria-label', `${shortDate(day)} ${done ? '완료' : '미완료'}`);
       button.setAttribute('aria-pressed', String(done));
       button.addEventListener('click', () => {
-        if (canCheck(day, today())) update((s) => toggleCheck(s, habit.id, day));
+        if (canCheck(day, today())) toggle(habit, day, button.dataset.focus);
       });
-      return button;
+      return focusable(button, `day:${habit.id}:${day}`);
     });
-    return el('div', {}, [`${shortDate(days[0])}~${shortDate(date)} `, ...buttons]);
+    const week = el('div', { className: 'week' }, buttons);
+    week.setAttribute('role', 'group');
+    week.setAttribute('aria-label', `최근 7일 (${shortDate(days[0])}~${shortDate(date)})`);
+    return week;
   }
 
   function renderHabit(habit, date) {
     if (habit.id === editingId) return renderEditing(habit);
 
-    const checkbox = el('input', { type: 'checkbox', checked: habit.checks.includes(date) });
-    checkbox.addEventListener('change', () => update((s) => toggleCheck(s, habit.id, date)));
+    const doneToday = habit.checks.includes(date);
+    const checkbox = el('input', { type: 'checkbox', checked: doneToday });
+    checkbox.addEventListener('change', () => toggle(habit, date, checkbox.dataset.focus));
+    focusable(checkbox, `check:${habit.id}`);
 
-    const renameButton = el('button', { type: 'button', textContent: '수정' });
+    const renameButton = el('button', { type: 'button', className: 'btn btn-small', textContent: '수정' });
     renameButton.addEventListener('click', () => startEdit(habit.id));
+    focusable(renameButton, `rename:${habit.id}`);
 
-    const deleteButton = el('button', { type: 'button', textContent: '삭제' });
+    const deleteButton = el('button', { type: 'button', className: 'btn btn-small', textContent: '삭제' });
     deleteButton.addEventListener('click', () => {
       askConfirm(`'${habit.name}' 습관을 삭제할까요? 기록도 함께 사라집니다.`, '삭제', () =>
         update((s) => deleteHabit(s, habit.id)),
@@ -151,17 +187,30 @@ export function mountApp(root) {
     // const month = monthlyRate(habit.checks, date, habit.createdAt);
     // stats += ` · 이번 달 ${Math.round(month.rate * 100)}% (${month.done}/${month.total})`; // stats를 let으로
 
-    return el('li', {}, [
-      el('div', {}, [el('label', {}, [checkbox, ` ${habit.name}`]), ' ', renameButton, ' ', deleteButton]),
-      el('div', { textContent: stats }),
+    return el('li', { className: `habit${doneToday ? ' done' : ''}` }, [
+      el('div', { className: 'habit-top' }, [
+        el('label', { className: 'habit-check' }, [checkbox, el('span', { className: 'habit-name', textContent: habit.name })]),
+        renameButton,
+        deleteButton,
+      ]),
+      el('div', { className: 'habit-stats', textContent: stats }),
       renderWeek(habit, date),
     ]);
   }
 
   function render() {
     const date = today();
+    const focusKey = document.activeElement?.dataset?.focus;
     list.replaceChildren(...state.habits.map((h) => renderHabit(h, date)));
-    if (state.habits.length === 0) list.append(el('li', { textContent: '아직 습관이 없어요. 위에서 추가해 보세요.' }));
+    if (state.habits.length === 0) {
+      list.append(
+        el('li', { className: 'empty' }, [
+          el('strong', { textContent: '아직 습관이 없어요' }),
+          '매일 지키고 싶은 일을 위에 적고 Enter를 눌러 보세요.',
+        ]),
+      );
+    }
+    if (focusKey) [...list.querySelectorAll('[data-focus]')].find((n) => n.dataset.focus === focusKey)?.focus();
   }
 
   form.addEventListener('submit', (event) => {
