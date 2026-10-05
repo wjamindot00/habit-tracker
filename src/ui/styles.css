@@ -1,0 +1,286 @@
+/* 습관 트래커 화면 스타일 (PRD M5). 색은 모두 변수로 두고 다크 모드에서 바꾼다. */
+
+:root {
+  color-scheme: light dark;
+  --bg: #f6f7f9;
+  --card: #ffffff;
+  --text: #1d2129;
+  --muted: #6b7280;
+  --border: #e3e6ea;
+  --accent: #16a34a;
+  --accent-soft: #dcfce7;
+  --accent-text: #ffffff;
+  --danger: #dc2626;
+  --focus: #2563eb;
+  --radius: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111418;
+    --card: #1b1f25;
+    --text: #e8eaed;
+    --muted: #9aa0a6;
+    --border: #2d333b;
+    --accent: #22c55e;
+    --accent-soft: #14301f;
+    --accent-text: #0b1a10;
+    --danger: #f87171;
+    --focus: #60a5fa;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  word-break: keep-all; /* 한글을 글자 중간이 아니라 단어 단위로 줄바꿈 */
+}
+
+main {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+h1 {
+  margin: 0 0 16px;
+  font-size: 1.5rem;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* 추가 폼 */
+.add-form {
+  display: flex;
+  gap: 8px;
+}
+
+.add-form input,
+.edit-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.btn {
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  white-space: nowrap;
+}
+
+.btn-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.btn-danger {
+  border-color: var(--danger);
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn-small {
+  padding: 4px 10px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.btn-small:hover {
+  background: var(--bg);
+}
+
+.message {
+  margin: 8px 0 0;
+  color: var(--danger);
+  font-size: 0.875rem;
+}
+
+.message:empty {
+  display: none;
+}
+
+/* 습관 목록 */
+.habit-list {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.habit {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.habit.done {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.habit-top {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.habit-check {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.habit-check input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.habit-name {
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+
+.habit.done .habit-name {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.habit-stats {
+  margin: 4px 0 10px 32px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* 최근 7일 — 동그라미 하나가 하루. 채워지면 완료 */
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.day {
+  aspect-ratio: 1;
+  max-width: 40px;
+  width: 100%;
+  justify-self: center;
+  padding: 0;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.day.checked {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.day.today {
+  border-color: var(--accent);
+}
+
+.edit-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.empty {
+  padding: 32px 16px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text);
+  font-size: 1.125rem;
+}
+
+/* 체크 피드백 */
+.pop {
+  animation: pop 0.3s ease-out;
+}
+
+@keyframes pop {
+  50% {
+    transform: scale(1.25);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop {
+    animation: none;
+  }
+  .habit {
+    transition: none;
+  }
+}
+
+/* 확인창 */
+dialog {
+  width: min(360px, calc(100% - 32px));
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--text);
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.4);
+}
+
+dialog p {
+  margin: 0 0 16px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
