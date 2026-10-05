@@ -23,7 +23,7 @@
 ## 🚀 실행하기
 
 ```bash
-git clone <저장소 주소>
+git clone https://github.com/wjamindot00/habit-tracker.git
 cd habit-tracker
 npx serve .          # 브라우저에서 http://localhost:3000
 ```
