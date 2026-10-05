@@ -145,7 +145,7 @@ habit-tracker/
   - [x] 습관 추가 → 체크 → 새로고침 후에도 체크와 스트릭 유지
   - [x] 삭제 시 확인창이 뜬다
   - [x] 잘못된 입력 시 에러 메시지가 보인다
-  - [ ] 🎉 **여기까지가 MVP.** GitHub Pages에 첫 배포
+  - [x] 🎉 **여기까지가 MVP.** GitHub Pages에 첫 배포 → https://wjamindot00.github.io/habit-tracker/
 
 ### M4. 부가 기능 (F7~F10)
 - **목표:** 기록을 돌아보는 기능
