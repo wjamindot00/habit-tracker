@@ -3,7 +3,7 @@
 > 매일 체크하고, 연속 기록(🔥 스트릭)으로 습관을 지키는 웹 앱
 
 ![status](https://img.shields.io/badge/status-개발중-yellow)
-![milestone](https://img.shields.io/badge/milestone-M4-blue)
+![milestone](https://img.shields.io/badge/milestone-M5-blue)
 
 👉 **바로 써보기: https://wjamindot00.github.io/habit-tracker/**
 
@@ -47,7 +47,7 @@ npm test
 | ✅ | M1 | 핵심 로직: 습관 추가·수정·삭제·체크 |
 | ✅ | M2 | 핵심 로직: 스트릭 계산 + 저장 |
 | ✅ | M3 | 최소 UI 연결 → **MVP 완성 & 첫 배포** |
-| ⬜ | M4 | 부가 기능: 7일 기록, 통계, 백업 |
+| ✅ | M4 | 부가 기능: 7일 기록, 최장 스트릭 (달성률·백업은 보류) |
 | ⬜ | M5 | UI/UX 다듬기 |
 | ⬜ | M6 | 마무리 |
 

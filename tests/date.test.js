@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { today, addDays, isDateString } from '../src/core/date.js';
+import { today, addDays, isDateString, recentDays } from '../src/core/date.js';
 
 test('today: 로컬 시간 기준 YYYY-MM-DD를 반환한다', () => {
   assert.equal(today(new Date(2026, 9, 5, 0, 0, 0)), '2026-10-05');
@@ -51,4 +51,12 @@ test('isDateString: 형식과 실제 존재 여부를 확인한다', () => {
   assert.equal(isDateString('2026-1-5'), false);
   assert.equal(isDateString(''), false);
   assert.equal(isDateString(null), false);
+});
+
+test('recentDays: 오늘 포함 최근 n일을 오래된 순으로', () => {
+  assert.deepEqual(recentDays('2026-10-05', 3), ['2026-10-03', '2026-10-04', '2026-10-05']);
+  assert.deepEqual(recentDays('2027-01-02', 7), [
+    '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31', '2027-01-01', '2027-01-02',
+  ]);
+  assert.deepEqual(recentDays('2026-10-05', 1), ['2026-10-05']);
 });

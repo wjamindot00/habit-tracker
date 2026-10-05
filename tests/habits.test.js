@@ -7,6 +7,7 @@ import {
   deleteHabit,
   toggleCheck,
   HabitError,
+  canCheck,
 } from '../src/core/habits.js';
 
 const NOW = new Date(2026, 9, 5, 9, 0, 0);
@@ -195,5 +196,22 @@ describe('toggleCheck', () => {
 
   test('없는 ID는 에러', () => {
     assert.throws(() => toggleCheck(withHabits('A'), 'h_없음', '2026-10-05'), errorCode('NOT_FOUND'));
+  });
+});
+
+describe('canCheck', () => {
+  const today = '2026-10-05';
+
+  test('오늘부터 6일 전까지(7일)는 가능', () => {
+    for (const d of ['2026-10-05', '2026-10-04', '2026-09-29']) assert.equal(canCheck(d, today), true, d);
+  });
+
+  test('7일 전, 미래, 잘못된 날짜는 불가', () => {
+    for (const d of ['2026-09-28', '2026-10-06', '2026-10-32', '']) assert.equal(canCheck(d, today), false, d);
+  });
+
+  test('연초에는 작년 말까지 허용', () => {
+    assert.equal(canCheck('2026-12-27', '2027-01-02'), true);
+    assert.equal(canCheck('2026-12-26', '2027-01-02'), false);
   });
 });

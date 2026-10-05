@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { currentStreak } from '../src/core/streak.js';
+import { currentStreak, longestStreak, monthlyRate } from '../src/core/streak.js';
 
 const TODAY = '2026-10-05';
 
@@ -71,5 +71,54 @@ describe('currentStreak: 기타', () => {
 
   test('잘못된 today는 에러', () => {
     assert.throws(() => currentStreak([], '2026/10/05'), TypeError);
+  });
+});
+
+describe('longestStreak', () => {
+  test('가장 긴 연속 구간', () => {
+    const checks = ['2026-09-01', '2026-09-02', '2026-09-03', '2026-09-10', '2026-10-04', '2026-10-05'];
+    assert.equal(longestStreak(checks), 3);
+  });
+
+  test('없음 → 0, 하루 → 1', () => {
+    assert.equal(longestStreak([]), 0);
+    assert.equal(longestStreak(['2026-10-05']), 1);
+  });
+
+  test('연말·연초를 이어서 센다', () => {
+    assert.equal(longestStreak(['2026-12-30', '2026-12-31', '2027-01-01', '2027-01-02']), 4);
+  });
+
+  test('정렬 안 됨·중복이 있어도 같은 결과', () => {
+    assert.equal(longestStreak(['2026-10-03', '2026-10-01', '2026-10-02', '2026-10-02']), 3);
+  });
+});
+
+describe('monthlyRate', () => {
+  test('이번 달 1일부터 오늘까지 기준', () => {
+    // 10/01~10/05 중 3일 완료, 지난달 기록은 제외
+    const checks = ['2026-09-30', '2026-10-01', '2026-10-03', '2026-10-05'];
+    assert.deepEqual(monthlyRate(checks, TODAY, '2026-09-01'), { done: 3, total: 5, rate: 3 / 5 });
+  });
+
+  test('이번 달에 만든 습관은 만든 날부터 센다', () => {
+    assert.deepEqual(monthlyRate(['2026-10-04', '2026-10-05'], TODAY, '2026-10-04'), { done: 2, total: 2, rate: 1 });
+  });
+
+  test('1일에 하나도 안 했으면 0', () => {
+    assert.deepEqual(monthlyRate([], '2026-11-01', '2026-10-01'), { done: 0, total: 1, rate: 0 });
+  });
+
+  test('미래 체크는 세지 않는다', () => {
+    assert.deepEqual(monthlyRate(['2026-10-05', '2026-10-06'], TODAY, TODAY), { done: 1, total: 1, rate: 1 });
+  });
+
+  test('createdAt이 오늘보다 뒤면 0/0', () => {
+    assert.deepEqual(monthlyRate([], TODAY, '2026-10-06'), { done: 0, total: 0, rate: 0 });
+  });
+
+  test('2월 말일 (윤년)', () => {
+    const checks = Array.from({ length: 29 }, (_, i) => `2028-02-${String(i + 1).padStart(2, '0')}`);
+    assert.deepEqual(monthlyRate(checks, '2028-02-29', '2028-01-01'), { done: 29, total: 29, rate: 1 });
   });
 });
