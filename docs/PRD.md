@@ -107,13 +107,13 @@ habit-tracker/
 ### M0. 프로젝트 셋업
 - **목표:** 빈 화면이 뜨고 테스트가 돌아가는 뼈대
 - **작업**
-  - [ ] 폴더 구조 생성 (§7), `index.html`에 "Habit Tracker" 제목만 표시
-  - [ ] `package.json`에 `test` 스크립트 (`node --test`)
-  - [ ] `.gitignore`, Git 저장소 초기화, GitHub 원격 저장소 연결
+  - [x] 폴더 구조 생성 (§7), `index.html`에 "Habit Tracker" 제목만 표시
+  - [x] `package.json`에 `test` 스크립트 (`node --test`)
+  - [x] `.gitignore`, Git 저장소 초기화, GitHub 원격 저장소 연결
 - **DoD**
-  - [ ] 브라우저에서 `index.html`이 열린다
-  - [ ] `npm test`가 (빈 테스트라도) 통과한다
-  - [ ] GitHub `main` 브랜치에 첫 커밋이 올라가 있다
+  - [x] 브라우저에서 `index.html`이 열린다
+  - [x] `npm test`가 (빈 테스트라도) 통과한다
+  - [x] GitHub `main` 브랜치에 첫 커밋이 올라가 있다
 
 ### M1. 핵심 로직 — 습관 CRUD + 체크 (F1~F4)
 - **목표:** 화면 없이도 습관을 다룰 수 있는 로직 완성
