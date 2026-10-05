@@ -28,3 +28,8 @@ export function addDays(date, n) {
   const result = new Date(Date.UTC(y, mo - 1, d + n));
   return `${result.getUTCFullYear()}-${pad(result.getUTCMonth() + 1)}-${pad(result.getUTCDate())}`;
 }
+
+/** today를 마지막으로 하는 최근 n일 목록 (오래된 날짜부터) */
+export function recentDays(today, n) {
+  return Array.from({ length: n }, (_, i) => addDays(today, i - n + 1));
+}

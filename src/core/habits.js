@@ -1,7 +1,7 @@
 // 습관 추가·수정·삭제·체크 (PRD F1~F4).
 // 모든 함수는 원본 state를 바꾸지 않고 새 state를 반환한다.
 
-import { isDateString, today } from './date.js';
+import { addDays, isDateString, today } from './date.js';
 
 export const NAME_MAX_LENGTH = 30;
 
@@ -76,4 +76,12 @@ export function toggleCheck(state, id, date = today()) {
     : [...checks, date].sort(); // YYYY-MM-DD는 문자열 정렬 = 날짜 정렬
   const habit = { ...state.habits[index], checks: nextChecks };
   return { ...state, habits: replaceAt(state.habits, index, habit) };
+}
+
+// 지난 날짜 소급 체크는 오늘 포함 최근 7일까지만 허용한다 (PRD F8).
+export const CHECK_WINDOW_DAYS = 7;
+
+/** date를 오늘 기준으로 체크할 수 있는지 (미래·7일 이전은 불가) */
+export function canCheck(date, today) {
+  return isDateString(date) && date <= today && date > addDays(today, -CHECK_WINDOW_DAYS);
 }
