@@ -10,9 +10,10 @@ import {
   CHECK_WINDOW_DAYS,
   HabitError,
 } from '../core/habits.js';
-import { currentStreak, longestStreak, monthlyRate } from '../core/streak.js';
+import { currentStreak, longestStreak /* , monthlyRate */ } from '../core/streak.js';
 import { load, save } from '../core/storage.js';
-import { exportState, importState, backupFileName, ImportError } from '../core/backup.js';
+// [비활성화] 백업 기능 — 다시 쓰려면 이 import와 아래 '[비활성화] 백업' 블록들의 주석을 푼다.
+// import { exportState, importState, backupFileName, ImportError } from '../core/backup.js';
 
 function el(tag, props = {}, children = []) {
   const node = Object.assign(document.createElement(tag), props);
@@ -33,10 +34,11 @@ export function mountApp(root) {
   const message = el('p', { role: 'alert' });
   const list = el('ul');
 
-  const exportButton = el('button', { type: 'button', textContent: '내보내기' });
-  const importButton = el('button', { type: 'button', textContent: '가져오기' });
-  const fileInput = el('input', { type: 'file', accept: '.json,application/json', hidden: true });
-  const backup = el('p', {}, ['백업: ', exportButton, ' ', importButton, fileInput]);
+  // [비활성화] 백업
+  // const exportButton = el('button', { type: 'button', textContent: '내보내기' });
+  // const importButton = el('button', { type: 'button', textContent: '가져오기' });
+  // const fileInput = el('input', { type: 'file', accept: '.json,application/json', hidden: true });
+  // const backup = el('p', {}, ['백업: ', exportButton, ' ', importButton, fileInput]);
 
   // 브라우저 기본 confirm()은 인앱 브라우저 등에서 막힐 수 있어 <dialog>로 직접 띄운다.
   const dialogText = el('p');
@@ -61,7 +63,7 @@ export function mountApp(root) {
     dialog.showModal();
   }
 
-  root.replaceChildren(form, message, list, backup, dialog);
+  root.replaceChildren(form, message, list, /* backup, */ dialog);
 
   function commit(next) {
     state = next;
@@ -144,10 +146,10 @@ export function mountApp(root) {
       );
     });
 
-    const month = monthlyRate(habit.checks, date, habit.createdAt);
-    const stats =
-      `🔥 ${currentStreak(habit.checks, date)}일 · 최장 ${longestStreak(habit.checks)}일 · ` +
-      `이번 달 ${Math.round(month.rate * 100)}% (${month.done}/${month.total})`;
+    const stats = `🔥 ${currentStreak(habit.checks, date)}일 · 최장 ${longestStreak(habit.checks)}일`;
+    // [비활성화] 이번 달 달성률 — 알려진 문제: 만든 날 이전 소급 체크가 빠지고, 아직 안 한 오늘이 분모에 들어감.
+    // const month = monthlyRate(habit.checks, date, habit.createdAt);
+    // stats += ` · 이번 달 ${Math.round(month.rate * 100)}% (${month.done}/${month.total})`; // stats를 let으로
 
     return el('li', {}, [
       el('div', {}, [el('label', {}, [checkbox, ` ${habit.name}`]), ' ', renameButton, ' ', deleteButton]),
@@ -168,30 +170,31 @@ export function mountApp(root) {
     input.focus();
   });
 
-  exportButton.addEventListener('click', () => {
-    const url = URL.createObjectURL(new Blob([exportState(state)], { type: 'application/json' }));
-    el('a', { href: url, download: backupFileName(today()) }).click();
-    setTimeout(() => URL.revokeObjectURL(url), 0);
-  });
-
-  importButton.addEventListener('click', () => fileInput.click());
-  fileInput.addEventListener('change', async () => {
-    const [file] = fileInput.files;
-    fileInput.value = ''; // 같은 파일을 다시 골라도 change가 발생하도록
-    if (!file) return;
-    let imported;
-    try {
-      imported = importState(await file.text());
-    } catch (err) {
-      if (!(err instanceof ImportError)) throw err;
-      message.textContent = `가져오기 실패: ${err.message}`;
-      return;
-    }
-    askConfirm(`습관 ${imported.habits.length}개를 가져옵니다. 지금 기록은 모두 바뀝니다. 계속할까요?`, '가져오기', () => {
-      editingId = null;
-      commit(imported);
-    });
-  });
+  // [비활성화] 백업
+  // exportButton.addEventListener('click', () => {
+  //   const url = URL.createObjectURL(new Blob([exportState(state)], { type: 'application/json' }));
+  //   el('a', { href: url, download: backupFileName(today()) }).click();
+  //   setTimeout(() => URL.revokeObjectURL(url), 0);
+  // });
+  //
+  // importButton.addEventListener('click', () => fileInput.click());
+  // fileInput.addEventListener('change', async () => {
+  //   const [file] = fileInput.files;
+  //   fileInput.value = ''; // 같은 파일을 다시 골라도 change가 발생하도록
+  //   if (!file) return;
+  //   let imported;
+  //   try {
+  //     imported = importState(await file.text());
+  //   } catch (err) {
+  //     if (!(err instanceof ImportError)) throw err;
+  //     message.textContent = `가져오기 실패: ${err.message}`;
+  //     return;
+  //   }
+  //   askConfirm(`습관 ${imported.habits.length}개를 가져옵니다. 지금 기록은 모두 바뀝니다. 계속할까요?`, '가져오기', () => {
+  //     editingId = null;
+  //     commit(imported);
+  //   });
+  // });
 
   // 자정을 넘겨 탭으로 돌아왔을 때 '오늘' 기준을 새로 잡는다. 이름 수정 중에는 입력이 날아가지 않게 건너뛴다.
   document.addEventListener('visibilitychange', () => {
