@@ -66,6 +66,10 @@ HTML · CSS · JavaScript · localStorage · Node 테스트 러너 · GitHub Pag
 
 ## 🤝 작업 규칙
 
-- 마일스톤 하나 = 브랜치 하나 = PR 하나 → 예: `feat/m1-habit-crud`
+- 브랜치 구조
+  - `main`: 실제 서비스(배포) 브랜치. `develop`에서 검증된 것만 PR로 머지
+  - `develop`: 개발 통합 브랜치. 작업 브랜치는 여기서 만들고 여기로 머지
+  - `feat/*`: 마일스톤 하나 = 브랜치 하나 = PR 하나 → 예: `feat/m1-habit-crud`
+- 흐름: `develop` → `feat/m2-...` → PR(base: `develop`) → 배포 시점에 `develop` → `main` PR
 - 커밋 메시지: `feat: 습관 추가 기능` · `fix: 스트릭 연말 계산 오류` · `docs: README 갱신`
 - PR 머지 조건: PRD의 해당 마일스톤 DoD 전부 체크 + `npm test` 통과
