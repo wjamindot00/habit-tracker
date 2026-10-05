@@ -119,12 +119,12 @@ habit-tracker/
 ### M1. 핵심 로직 — 습관 CRUD + 체크 (F1~F4)
 - **목표:** 화면 없이도 습관을 다룰 수 있는 로직 완성
 - **작업**
-  - [ ] `date.js`: `today()`, `addDays(date, n)` — `YYYY-MM-DD` 문자열 기반
-  - [ ] `habits.js`: `addHabit`, `renameHabit`, `deleteHabit`, `toggleCheck` (원본을 바꾸지 않고 새 상태 반환)
-  - [ ] 입력 검증: 빈 이름·30자 초과·중복 이름 → 에러
+  - [x] `date.js`: `today()`, `addDays(date, n)` — `YYYY-MM-DD` 문자열 기반
+  - [x] `habits.js`: `addHabit`, `renameHabit`, `deleteHabit`, `toggleCheck` (원본을 바꾸지 않고 새 상태 반환)
+  - [x] 입력 검증: 빈 이름·30자 초과·중복 이름 → 에러
 - **DoD**
-  - [ ] 각 함수에 정상/예외 케이스 테스트가 있고 `npm test` 통과
-  - [ ] `toggleCheck`를 두 번 하면 원래 상태로 돌아온다
+  - [x] 각 함수에 정상/예외 케이스 테스트가 있고 `npm test` 통과
+  - [x] `toggleCheck`를 두 번 하면 원래 상태로 돌아온다
 
 ### M2. 핵심 로직 — 스트릭 + 저장 (F5, F6)
 - **목표:** 앱의 핵심 가치(연속 기록)와 데이터 유지
