@@ -1,6 +1,6 @@
 {
   "name": "habit-tracker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "매일 체크하고 연속 기록으로 습관을 지키는 웹 앱",
   "private": true,
   "type": "module",

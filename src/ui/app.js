@@ -12,14 +12,10 @@ import {
 } from '../core/habits.js';
 import { currentStreak, longestStreak /* , monthlyRate */ } from '../core/streak.js';
 import { load, save } from '../core/storage.js';
+import { el } from './dom.js';
+import { renderMonth, renderYear, scrollYearToToday } from './activity.js';
 // [비활성화] 백업 기능 — 다시 쓰려면 이 import와 아래 '[비활성화] 백업' 블록들의 주석을 푼다.
 // import { exportState, importState, backupFileName, ImportError } from '../core/backup.js';
-
-function el(tag, props = {}, children = []) {
-  const node = Object.assign(document.createElement(tag), props);
-  node.append(...children);
-  return node;
-}
 
 // '2026-10-05' → '10/5'
 const shortDate = (date) => `${Number(date.slice(5, 7))}/${Number(date.slice(8))}`;
@@ -37,6 +33,9 @@ export function mountApp(root) {
   ]);
   const message = el('p', { role: 'alert', className: 'message' });
   const list = el('ul', { className: 'habit-list' });
+  // 이번 달 달력 · 연간 기록 — 보기 전용 (누르는 동작은 디자인 후 추가)
+  const monthSection = el('section', { className: 'panel' });
+  const yearSection = el('section', { className: 'panel' });
 
   // [비활성화] 백업
   // const exportButton = el('button', { type: 'button', textContent: '내보내기' });
@@ -70,7 +69,7 @@ export function mountApp(root) {
     dialog.showModal();
   }
 
-  root.replaceChildren(form, message, list, /* backup, */ dialog);
+  root.replaceChildren(monthSection, form, message, list, yearSection, /* backup, */ dialog);
 
   function commit(next) {
     state = next;
@@ -210,6 +209,9 @@ export function mountApp(root) {
         ]),
       );
     }
+    monthSection.replaceChildren(...renderMonth(state.habits, date));
+    yearSection.replaceChildren(...renderYear(state.habits, date));
+    scrollYearToToday(yearSection);
     if (focusKey) [...list.querySelectorAll('[data-focus]')].find((n) => n.dataset.focus === focusKey)?.focus();
   }
 
