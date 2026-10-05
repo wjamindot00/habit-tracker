@@ -2,8 +2,8 @@
 
 > 매일 체크하고, 연속 기록(🔥 스트릭)으로 습관을 지키는 웹 앱
 
-![status](https://img.shields.io/badge/status-기획중-lightgrey)
-![milestone](https://img.shields.io/badge/milestone-M0-blue)
+![status](https://img.shields.io/badge/status-개발중-yellow)
+![milestone](https://img.shields.io/badge/milestone-M1-blue)
 
 <!-- M3 이후 스크린샷 추가 -->
 
@@ -25,7 +25,7 @@
 ```bash
 git clone https://github.com/wjamindot00/habit-tracker.git
 cd habit-tracker
-npx serve .          # 브라우저에서 http://localhost:3000
+npm start            # 브라우저에서 http://localhost:3000
 ```
 
 테스트:
@@ -35,12 +35,13 @@ npm test
 ```
 
 > 필요한 것: [Node.js](https://nodejs.org) 18 이상 (테스트·로컬 서버용)
+> `index.html`을 더블클릭으로 열면 동작하지 않아요. 브라우저 보안 정책상 모듈 스크립트는 서버를 통해서만 열 수 있으니 꼭 `npm start`로 실행하세요.
 
 ## 🗺️ 진행 상황
 
 | | 마일스톤 | 내용 |
 |---|---|---|
-| ⬜ | M0 | 프로젝트 셋업 |
+| ✅ | M0 | 프로젝트 셋업 |
 | ⬜ | M1 | 핵심 로직: 습관 추가·수정·삭제·체크 |
 | ⬜ | M2 | 핵심 로직: 스트릭 계산 + 저장 |
 | ⬜ | M3 | 최소 UI 연결 → **MVP 완성 & 첫 배포** |
