@@ -1,7 +1,29 @@
+# 의존성·빌드 결과
 node_modules/
+dist/
+coverage/
+*.log
+
+# OS·에디터
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
-*.log
+
+# 민감한 정보 — 절대 커밋하지 않기 (공개 저장소)
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials*.json
+*.local.json
+
+# AI 도구 개인 설정
+.claude/settings.local.json
+
+# 백업으로 내보낸 개인 기록 (M4 내보내기 기능)
+habit-tracker-backup*.json

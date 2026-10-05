@@ -3,7 +3,7 @@
 > 매일 체크하고, 연속 기록(🔥 스트릭)으로 습관을 지키는 웹 앱
 
 ![status](https://img.shields.io/badge/status-개발중-yellow)
-![milestone](https://img.shields.io/badge/milestone-M1-blue)
+![milestone](https://img.shields.io/badge/milestone-M3-blue)
 
 <!-- M3 이후 스크린샷 추가 -->
 
@@ -42,8 +42,8 @@ npm test
 | | 마일스톤 | 내용 |
 |---|---|---|
 | ✅ | M0 | 프로젝트 셋업 |
-| ⬜ | M1 | 핵심 로직: 습관 추가·수정·삭제·체크 |
-| ⬜ | M2 | 핵심 로직: 스트릭 계산 + 저장 |
+| ✅ | M1 | 핵심 로직: 습관 추가·수정·삭제·체크 |
+| ✅ | M2 | 핵심 로직: 스트릭 계산 + 저장 |
 | ⬜ | M3 | 최소 UI 연결 → **MVP 완성 & 첫 배포** |
 | ⬜ | M4 | 부가 기능: 7일 기록, 통계, 백업 |
 | ⬜ | M5 | UI/UX 다듬기 |
@@ -66,6 +66,10 @@ HTML · CSS · JavaScript · localStorage · Node 테스트 러너 · GitHub Pag
 
 ## 🤝 작업 규칙
 
-- 마일스톤 하나 = 브랜치 하나 = PR 하나 → 예: `feat/m1-habit-crud`
+- 브랜치 구조
+  - `main`: 실제 서비스(배포) 브랜치. `develop`에서 검증된 것만 PR로 머지
+  - `develop`: 개발 통합 브랜치. 작업 브랜치는 여기서 만들고 여기로 머지
+  - `feat/*`: 마일스톤 하나 = 브랜치 하나 = PR 하나 → 예: `feat/m1-habit-crud`
+- 흐름: `develop` → `feat/m2-...` → PR(base: `develop`) → 배포 시점에 `develop` → `main` PR
 - 커밋 메시지: `feat: 습관 추가 기능` · `fix: 스트릭 연말 계산 오류` · `docs: README 갱신`
 - PR 머지 조건: PRD의 해당 마일스톤 DoD 전부 체크 + `npm test` 통과
