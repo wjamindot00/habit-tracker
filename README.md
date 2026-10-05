@@ -1,0 +1,70 @@
+# ✅ Habit Tracker
+
+> 매일 체크하고, 연속 기록(🔥 스트릭)으로 습관을 지키는 웹 앱
+
+![status](https://img.shields.io/badge/status-기획중-lightgrey)
+![milestone](https://img.shields.io/badge/milestone-M0-blue)
+
+<!-- M3 이후 스크린샷 추가 -->
+
+---
+
+## 🎯 무엇을 하나요?
+
+| 기능 | 설명 |
+|---|---|
+| ➕ 습관 추가 | "물 2L 마시기"처럼 매일 할 일을 등록 |
+| ☑️ 오늘 체크 | 했으면 체크 한 번 |
+| 🔥 스트릭 | 며칠 연속으로 지켰는지 표시 |
+| 💾 자동 저장 | 브라우저를 닫아도 기록 유지 |
+
+로그인 없음 · 서버 없음 · 설치 없음
+
+## 🚀 실행하기
+
+```bash
+git clone <저장소 주소>
+cd habit-tracker
+npx serve .          # 브라우저에서 http://localhost:3000
+```
+
+테스트:
+
+```bash
+npm test
+```
+
+> 필요한 것: [Node.js](https://nodejs.org) 18 이상 (테스트·로컬 서버용)
+
+## 🗺️ 진행 상황
+
+| | 마일스톤 | 내용 |
+|---|---|---|
+| ⬜ | M0 | 프로젝트 셋업 |
+| ⬜ | M1 | 핵심 로직: 습관 추가·수정·삭제·체크 |
+| ⬜ | M2 | 핵심 로직: 스트릭 계산 + 저장 |
+| ⬜ | M3 | 최소 UI 연결 → **MVP 완성 & 첫 배포** |
+| ⬜ | M4 | 부가 기능: 7일 기록, 통계, 백업 |
+| ⬜ | M5 | UI/UX 다듬기 |
+| ⬜ | M6 | 마무리 |
+
+자세한 요구사항과 완료 기준 → **[docs/PRD.md](docs/PRD.md)**
+
+## 📁 구조
+
+```
+src/core/   핵심 로직 (화면과 무관, 테스트 대상)
+src/ui/     화면 그리기
+tests/      core 테스트
+docs/       기획 문서
+```
+
+## 🛠️ 기술 스택
+
+HTML · CSS · JavaScript · localStorage · Node 테스트 러너 · GitHub Pages
+
+## 🤝 작업 규칙
+
+- 마일스톤 하나 = 브랜치 하나 = PR 하나 → 예: `feat/m1-habit-crud`
+- 커밋 메시지: `feat: 습관 추가 기능` · `fix: 스트릭 연말 계산 오류` · `docs: README 갱신`
+- PR 머지 조건: PRD의 해당 마일스톤 DoD 전부 체크 + `npm test` 통과
